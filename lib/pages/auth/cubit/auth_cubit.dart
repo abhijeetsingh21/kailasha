@@ -5,11 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kailasha/app/app.dart';
 import 'package:kailasha/core/navigator/app_router.gr.dart';
-import 'package:kailasha/core/network/dio/api_exception.dart';
-import 'package:kailasha/core/repository/auth_repo.dart';
+import 'package:kailasha/repository/auth_repo.dart';
 import 'package:kailasha/core/utils/custom_toast.dart';
 import 'package:kailasha/pages/auth/cubit/auth_state.dart';
-
 
 @LazySingleton()
 class AuthCubit extends Cubit<AuthState> {
@@ -19,20 +17,29 @@ class AuthCubit extends Cubit<AuthState> {
 
   Timer? _timer;
 
-  Future<void> signIn() async {
+  Future<void> signIn({
+    required String phoneNumber,
+    required void Function(String) onCodeSent,
+    required void Function(String) onError,
+  }) async {
     try {
-      appRouter.pushAll([DashBoardRoute()]);
-    } on ApiException catch (e) {
-      log('error in sign in -- ${e.message}');
-      AppUtils.customToast(message: e.message);
+     await repository.sendOtp(
+        phoneNumber: phoneNumber,
+        onCodeSent: onCodeSent,
+        onError: onError,
+      );
+      
+      appRouter.replaceAll([HomeRoute()]);
+    } catch (e) {
+      log('error in sign in -- $e');
+      AppUtils.customToast(message: e.toString());
     }
   }
 
   Future<void> signUp() async {
-    try {
-    } on ApiException catch (e) {
-      log('error in sign in -- ${e.message}');
-      AppUtils.customToast(message: e.message);
+    try {} catch (e) {
+      log('error in sign in -- $e');
+      AppUtils.customToast(message: e.toString());
     }
   }
 

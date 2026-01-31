@@ -21,7 +21,7 @@ class SignInForm extends StatefulWidget {
 class _SignInFormState extends State<SignInForm> {
   final loginFormKey = GlobalKey<FormState>();
   final TextEditingController phoneController = TextEditingController(
-    text: kDebugMode ? '9999999999' : '',
+    text: kDebugMode ? '+918700053231' : '',
   );
   final TextEditingController passwordController = TextEditingController(
     text: kDebugMode ? 'Aa12345678!' : '',
@@ -39,6 +39,7 @@ class _SignInFormState extends State<SignInForm> {
                 horizontal: 20.widthMultiplier,
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   
                   LoginForm(

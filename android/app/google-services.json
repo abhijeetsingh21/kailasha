@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "428758505239",
+    "project_id": "prayog-1795a",
+    "storage_bucket": "prayog-1795a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:428758505239:android:c5e177663579f59bec4952",
+        "android_client_info": {
+          "package_name": "com.example.kailasha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7YiocTsB3g3eV-BEgpq95L7dVpBk2Rt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

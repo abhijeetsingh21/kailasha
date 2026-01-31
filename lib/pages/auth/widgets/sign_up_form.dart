@@ -8,7 +8,7 @@ import 'package:kailasha/common/custom_textfield.dart';
 import 'package:kailasha/common/image_loader.dart';
 import 'package:kailasha/common/phone_text_field.dart';
 import 'package:kailasha/core/constants/app_images.dart';
-import 'package:kailasha/core/models/custom_button_props_model/custom_button_props_model.dart';
+import 'package:kailasha/models/custom_button_props_model/custom_button_props_model.dart';
 import 'package:kailasha/core/navigator/app_router.gr.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';

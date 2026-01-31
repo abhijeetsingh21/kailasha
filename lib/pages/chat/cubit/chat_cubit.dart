@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kailasha/core/models/chat_messages_model/chat_message_model.dart';
+import 'package:kailasha/models/chat_messages_model/chat_message_model.dart';
 import 'package:kailasha/core/utils/common_enums.dart';
 
 part 'chat_state.dart';

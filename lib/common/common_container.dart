@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
 
 class CommonContainer extends StatelessWidget {
@@ -83,12 +84,12 @@ class GradientCommonContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double radius = borderRadius ?? 16.radiusMultiplier;
-    final double bw = borderWidth ?? 2;
+    final double radius = borderRadius ?? 8.radiusMultiplier;
+    final double bw = borderWidth ?? 1.5.widthMultiplier;
 
     return Container(
       margin: margin,
-      width: width,
+      width: width ?? double.infinity,
       height: height,
       padding: padding ?? EdgeInsets.all(12.heightMultiplier),
       decoration: BoxDecoration(
@@ -104,7 +105,14 @@ class GradientCommonContainer extends StatelessWidget {
                 ),
                 width: bw,
               )
-            : null,
+            : GradientBoxBorder(
+                gradient: LinearGradient(
+                  begin: Alignment(-0.017, 0.999), // ~90.69 deg
+                  end: Alignment(1, 0), // left to right
+                  colors: AppColors.textgradient ,
+                ),
+                width: bw,
+              ),
       ),
       child: child,
     );

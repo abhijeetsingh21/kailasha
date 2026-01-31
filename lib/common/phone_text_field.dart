@@ -55,36 +55,36 @@ class _CustomPhoneTextFieldState extends State<CustomPhoneTextField> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          flex: 1,
-          child: CommonContainer(
-            borderRadius: 8.radiusMultiplier,
-            padding: EdgeInsets.symmetric(
-              horizontal: 12.widthMultiplier,
-              vertical: 6.heightMultiplier,
-            ),
-            borderColor: AppColors.borderColor,
-            child: ClickableButton(
-              onTap: _openCountryPicker,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    _selectedCountry.flagEmoji,
-                    style: CustomTextStyle.customW600(fontSize: 25),
-                  ),
-                  2.horizontalSpace,
-                  Icon(
-                    Icons.arrow_drop_down,
-                    size: 25.heightMultiplier,
-                    color: AppColors.black100,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        10.horizontalSpace,
+        // Expanded(
+        //   flex: 1,
+        //   child: CommonContainer(
+        //     borderRadius: 8.radiusMultiplier,
+        //     padding: EdgeInsets.symmetric(
+        //       horizontal: 12.widthMultiplier,
+        //       vertical: 6.heightMultiplier,
+        //     ),
+        //     borderColor: AppColors.borderColor,
+        //     child: ClickableButton(
+        //       onTap: _openCountryPicker,
+        //       child: Row(
+        //         mainAxisSize: MainAxisSize.min,
+        //         children: [
+        //           Text(
+        //             _selectedCountry.flagEmoji,
+        //             style: CustomTextStyle.customW600(fontSize: 25),
+        //           ),
+        //           2.horizontalSpace,
+        //           Icon(
+        //             Icons.arrow_drop_down,
+        //             size: 25.heightMultiplier,
+        //             color: AppColors.black100,
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // 10.horizontalSpace,
         Expanded(
           flex: 3,
           child: CustomTextField(

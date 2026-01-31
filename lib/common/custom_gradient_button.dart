@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kailasha/common/clickable_button.dart';
+import 'package:kailasha/common/common_container.dart';
+import 'package:kailasha/common/gradient_text.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
 import 'package:kailasha/core/theme/app_text_style.dart';
@@ -67,7 +69,7 @@ class _CustomGradientButtonState extends State<CustomGradientButton> {
 
     return ClickableButton(
       onTap: _handleTap,
-      child: Container(
+      child: GradientCommonContainer(
         height: props.height,
         width: (props.isInfiniteWidth == true)
             ? double.infinity
@@ -78,34 +80,24 @@ class _CustomGradientButtonState extends State<CustomGradientButton> {
               horizontal: 24.widthMultiplier,
               vertical: 10.heightMultiplier,
             ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            props.borderRadius ?? 28.radiusMultiplier,
-          ),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: AppColors.textgradient,
-          ),
-        ),
+
         child: Center(
           child: _isLoading
               ? SizedBox(
-                  height: 12.heightMultiplier,
-                  width: 12.widthMultiplier,
+                  height: 20,
+                  width: 20,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.white100,
+                    color: AppColors.textgradient[1],
                   ),
                 )
               : props.child ??
-                    Text(
-                      props.title ?? '',
+                    GradientText(
+                     text: props.title ?? '',
                       style:
                           props.titleStyle ??
                           CustomTextStyle.customW500(
                             fontSize: 12,
-                            color: AppColors.white100,
                           ),
                     ),
         ),

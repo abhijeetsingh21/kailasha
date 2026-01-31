@@ -1,5 +1,8 @@
 
+import 'dart:convert';
+
 import 'package:kailasha/core/preference/preference.dart';
+import 'package:kailasha/models/user_data/user_data.dart';
 
 class PreferenceHelper {
   static const userEmail = "user_email";
@@ -106,10 +109,10 @@ class PreferenceHelper {
   }
 
   //User data methods
-  // static setUserData(UserData? model) async {
-  //   final data = jsonEncode(model?.toJson());
-  //   await Preferences().setString(userData, data);
-  // }
+  static setUserData(UserData? model) async {
+    final data = jsonEncode(model?.toJson());
+    await Preferences().setString(userData, data);
+  }
 
   static Future<void> clearAllPreferences() async {
     await Preferences().clearPreferenceData();

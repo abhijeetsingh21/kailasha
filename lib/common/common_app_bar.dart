@@ -33,8 +33,8 @@ class CommonAppBar extends AppBar {
          bottom: PreferredSize(
            preferredSize: Size.fromHeight(1.heightMultiplier),
            child: Container(
-             height: 1.heightMultiplier,
-             color: AppColors.white100,
+             height: 2.heightMultiplier,
+             color: AppColors.textgradient[1],
            ),
          ),
        );

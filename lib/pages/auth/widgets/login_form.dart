@@ -6,15 +6,15 @@ import 'package:kailasha/common/custom_button.dart';
 import 'package:kailasha/common/custom_textfield.dart';
 import 'package:kailasha/common/gradient_text.dart';
 import 'package:kailasha/common/image_loader.dart';
+import 'package:kailasha/common/phone_text_field.dart';
 import 'package:kailasha/core/constants/app_images.dart';
-import 'package:kailasha/core/models/custom_button_props_model/custom_button_props_model.dart';
+import 'package:kailasha/models/custom_button_props_model/custom_button_props_model.dart';
 import 'package:kailasha/core/navigator/app_router.gr.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
 import 'package:kailasha/core/theme/app_text_style.dart';
 import 'package:kailasha/core/utils/validators.dart';
 import 'package:kailasha/pages/auth/cubit/auth_cubit.dart';
-
 
 class LoginForm extends StatelessWidget {
   const LoginForm({
@@ -36,8 +36,8 @@ class LoginForm extends StatelessWidget {
       key: loginFormKey,
       autovalidateMode: AutovalidateMode.disabled,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           30.verticalSpace,
@@ -68,63 +68,58 @@ class LoginForm extends StatelessWidget {
               ),
               32.verticalSpace,
 
-              CustomTextField(
-                onFieldSubmitted: (p0) {
-                  FocusScope.of(context).unfocus();
-                  HitTestBehavior.translucent;
-                },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-
+              CustomPhoneTextField(
                 controller: phoneController,
                 hintText: 'Phone Number',
-                validator: (value) => validatePhoneNumber(value),
+                onChanged: (fullNumber) {
+                  phoneController.text = fullNumber;
+                },
               ),
 
               16.verticalSpace,
 
-              CustomTextField(
-                obscureText: true,
-                controller: passwordController,
-                onFieldSubmitted: (p0) {
-                  FocusScope.of(context).unfocus();
-                  HitTestBehavior.translucent;
-                },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                maxlines: 1,
-                borderRadius: 8.radiusMultiplier,
+              // CustomTextField(
+              //   obscureText: true,
+              //   controller: passwordController,
+              //   onFieldSubmitted: (p0) {
+              //     FocusScope.of(context).unfocus();
+              //     HitTestBehavior.translucent;
+              //   },
+              //   autovalidateMode: AutovalidateMode.onUserInteraction,
+              //   maxlines: 1,
+              //   borderRadius: 8.radiusMultiplier,
 
-                hintText: 'Enter your password',
-                backgroundColor: AppColors.white100,
-                validator: (value) => validatePassword(value),
-                isPasswordField: true,
-              ),
-              24.verticalSpace,
+              //   hintText: 'Enter your password',
+              //   backgroundColor: AppColors.white100,
+              //   validator: (value) => validatePassword(value),
+              //   isPasswordField: true,
+              // ),
+              // 24.verticalSpace,
 
-              // Remember Me + Forgot
-              Align(
-                alignment: Alignment.centerRight,
-                child: ClickableButton(
-                  onTap: () {},
-                  child: ClickableButton(
-                    onTap: () => {
-                      context.router.push(ForgotPasswordFlowRoute()),
-                    },
-                    child: GradientText(
-                      text: 'Forgot Password',
-                      style: CustomTextStyle.customW400(
-                        fontSize: 14,
-                      ).copyWith(),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: AppColors.textgradient,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              24.verticalSpace,
-
+              // // Remember Me + Forgot
+              // Align(
+              //   alignment: Alignment.centerRight,
+              //   child: ClickableButton(
+              //     onTap: () {},
+              //     child: ClickableButton(
+              //       onTap: () => {
+              //         context.router.push(ForgotPasswordFlowRoute()),
+              //       },
+              //       child: GradientText(
+              //         text: 'Forgot Password',
+              //         style: CustomTextStyle.customW400(
+              //           fontSize: 14,
+              //         ).copyWith(),
+              //         gradient: const LinearGradient(
+              //           begin: Alignment.topCenter,
+              //           end: Alignment.bottomCenter,
+              //           colors: AppColors.textgradient,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // 24.verticalSpace,
               CustomButton(
                 props: CustomButtonPropsModel(
                   text: 'Login',
@@ -133,7 +128,33 @@ class LoginForm extends StatelessWidget {
                     final isValidForm =
                         loginFormKey.currentState?.validate() ?? false;
                     if (isValidForm) {
-                      await authCubit.signIn();
+                      await authCubit.signIn(
+                        phoneNumber: phoneController.text,
+                        onCodeSent: (value) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                value,
+                                style: CustomTextStyle.customW400(
+                                  color: AppColors.white100,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        onError: (error) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                error,
+                                style: CustomTextStyle.customW400(
+                                  color: AppColors.white100,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
                     }
                     HitTestBehavior.translucent;
                   },

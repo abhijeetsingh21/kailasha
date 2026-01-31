@@ -12,7 +12,7 @@ class ResponseModel {
   factory ResponseModel.fromJson(Map<String, dynamic> json) {
     return ResponseModel(
       success: json['success'] ?? false,
-      message: json['msg'] ?? '',
+      message: json['messsage'] ?? '',
       data: json,
     );
   }
