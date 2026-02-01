@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kailasha/core/utils/custom_toast.dart';
+import 'package:kailasha/models/school_class/school_class_model.dart';
 
 @LazySingleton()
 class HomeRepo {
@@ -27,6 +30,27 @@ class HomeRepo {
       AppUtils.customToast(message: 'Class Added Successfully');
     } on FirebaseException catch (e) {
       AppUtils.customToast(message: e.message);
+      rethrow;
+    }
+  }
+
+  /// Fetch all classes of a school
+  Future<List<SchoolClassModel>> fetchSchoolClasses({
+    required String schoolId,
+  }) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('schools')
+          .doc(schoolId)
+          .collection('classes')
+          .orderBy('createdAt', descending: false)
+          .get();
+
+      return snapshot.docs
+          .map((doc) => SchoolClassModel.fromFirestore(doc))
+          .toList();
+    } on FirebaseException catch (e) {
+      log('❌ Failed to fetch classes: ${e.message}');
       rethrow;
     }
   }

@@ -1,26 +1,25 @@
 part of 'home_cubit.dart';
 
 class HomeState extends Equatable {
-  final List<String> classes;
+  final ApiStatus homeApiStatus;
+  final List<SchoolClassModel> classes;
 
-  const HomeState({required this.classes});
+  const HomeState({required this.classes, required this.homeApiStatus});
 
   factory HomeState.initial() {
+    return HomeState(classes: [], homeApiStatus: ApiStatus.int);
+  }
+
+  HomeState copyWith({
+    List<SchoolClassModel>? classes,
+    ApiStatus? homeApiStatus,
+  }) {
     return HomeState(
-      classes: [
-        'Class 6\'th',
-        'Class 7\'th',
-        'Class 8\'th',
-        'Class 9\'th',
-        'Class 10\'th',
-      ],
+      classes: classes ?? this.classes,
+      homeApiStatus: homeApiStatus ?? this.homeApiStatus,
     );
   }
 
-  HomeState copyWith({List<String>? classes}) {
-    return HomeState(classes: classes ?? this.classes);
-  }
-
   @override
-  List<Object?> get props => [classes];
+  List<Object?> get props => [classes, homeApiStatus];
 }

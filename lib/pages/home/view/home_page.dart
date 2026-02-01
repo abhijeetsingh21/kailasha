@@ -6,12 +6,14 @@ import 'package:kailasha/common/clickable_button.dart';
 import 'package:kailasha/common/common_app_bar.dart';
 import 'package:kailasha/common/common_background.dart';
 import 'package:kailasha/common/common_container.dart';
+import 'package:kailasha/common/common_functions.dart';
 import 'package:kailasha/common/custom_button.dart';
 import 'package:kailasha/common/gradient_text.dart';
 import 'package:kailasha/core/navigator/app_router.gr.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
 import 'package:kailasha/core/theme/app_text_style.dart';
+import 'package:kailasha/core/utils/common_enums.dart';
 import 'package:kailasha/models/custom_button_props_model/custom_button_props_model.dart';
 import 'package:kailasha/pages/auth/cubit/auth_cubit.dart';
 import 'package:kailasha/pages/home/cubit/home_cubit.dart';
@@ -32,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     homeCubit = context.read<HomeCubit>();
     authCubit = context.read<AuthCubit>();
+    homeCubit.fetchSchoolClasses();
     super.initState();
   }
 
@@ -67,6 +70,15 @@ class _HomePageState extends State<HomePage> {
       child: CommonContainer(
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
+            if (state.homeApiStatus == ApiStatus.loading) {
+              return CommonFunctions.progressIndicator();
+            }
+            if (state.classes.isEmpty) {
+              return Text(
+                'No Classes Yet',
+                style: CustomTextStyle.customW500(fontSize: 16),
+              );
+            }
             return Column(
               children: [
                 Expanded(
@@ -93,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                               Expanded(
                                 child: Center(
                                   child: GradientText(
-                                    text: currentClass,
+                                    text: currentClass.name,
                                     style: CustomTextStyle.customW500(
                                       fontSize: 20,
                                     ),
