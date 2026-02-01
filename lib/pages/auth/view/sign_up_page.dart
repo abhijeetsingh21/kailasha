@@ -83,7 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => context.router.pushAll([SignInForm()]),
+            onPressed: () => context.router.replaceAll([SignInForm()]),
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
           ),
         ],

@@ -9,7 +9,6 @@ import 'package:kailasha/pages/auth/cubit/auth_cubit.dart';
 import 'package:kailasha/pages/auth/cubit/auth_state.dart';
 import 'package:kailasha/pages/auth/widgets/login_form.dart';
 
-
 @RoutePage()
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
@@ -20,9 +19,7 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final loginFormKey = GlobalKey<FormState>();
-  final TextEditingController phoneController = TextEditingController(
-    text: kDebugMode ? '+918700053231' : '',
-  );
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController(
     text: kDebugMode ? 'Aa12345678!' : '',
   );
@@ -41,9 +38,8 @@ class _SignInFormState extends State<SignInForm> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  
                   LoginForm(
-                    phoneController: phoneController,
+                    emailController: emailController,
                     passwordController: passwordController,
                     authCubit: authCubit,
                     loginFormKey: loginFormKey,

@@ -6,12 +6,16 @@ import 'package:kailasha/common/clickable_button.dart';
 import 'package:kailasha/common/common_app_bar.dart';
 import 'package:kailasha/common/common_background.dart';
 import 'package:kailasha/common/common_container.dart';
+import 'package:kailasha/common/custom_button.dart';
 import 'package:kailasha/common/gradient_text.dart';
 import 'package:kailasha/core/navigator/app_router.gr.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
 import 'package:kailasha/core/theme/app_text_style.dart';
+import 'package:kailasha/models/custom_button_props_model/custom_button_props_model.dart';
+import 'package:kailasha/pages/auth/cubit/auth_cubit.dart';
 import 'package:kailasha/pages/home/cubit/home_cubit.dart';
+import 'package:kailasha/pages/home/widgets/add_class_dialog.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -23,9 +27,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late HomeCubit homeCubit;
+  late AuthCubit authCubit;
   @override
   void initState() {
     homeCubit = context.read<HomeCubit>();
+    authCubit = context.read<AuthCubit>();
     super.initState();
   }
 
@@ -38,6 +44,24 @@ class _HomePageState extends State<HomePage> {
           text: 'Prayog',
           style: CustomTextStyle.customW600(fontSize: 22),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16.widthMultiplier),
+            child: ClickableButton(
+              onTap: () {
+                AddClassDialog.showAddDialog(
+                  context: context,
+                  onAdd: (val1, val2) {},
+                );
+              },
+              child: Icon(
+                Icons.add,
+                size: 30.heightMultiplier,
+                color: AppColors.textgradient[1],
+              ),
+            ),
+          ),
+        ],
         showBackButton: false,
       ),
       child: CommonContainer(
@@ -81,6 +105,19 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     },
+                  ),
+                ),
+                10.verticalSpace,
+                CustomButton(
+                  props: CustomButtonPropsModel(
+                    onPressed: () async {
+                      await authCubit.signOut();
+                    },
+                    text: 'Log out',
+                    textStyle: CustomTextStyle.customW500(
+                      fontSize: 16,
+                      color: AppColors.white100,
+                    ),
                   ),
                 ),
               ],

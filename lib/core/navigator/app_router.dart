@@ -18,6 +18,7 @@ class AppRouter extends RootStackRouter {
     autoRouteComponent(page: ExperimentRoute.page),
     autoRouteComponent(page: ExperimentDetailsRoute.page),
     autoRouteComponent(page: AddExperimentRoute.page),
+    autoRouteComponent(page: SchoolSignupRoute.page),
 
     autoRouteComponent(page: ChatRoute.page),
 

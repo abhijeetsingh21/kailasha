@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:kailasha/core/preference/preference.dart';
@@ -112,6 +111,14 @@ class PreferenceHelper {
   static setUserData(UserData? model) async {
     final data = jsonEncode(model?.toJson());
     await Preferences().setString(userData, data);
+  }
+
+  static Future<UserData?> getUserData() async {
+    final localUserData = await Preferences().getString(userData, null);
+    if (localUserData != null) {
+      final data = UserData.fromJson(jsonDecode(localUserData));
+      return data;
+    }
   }
 
   static Future<void> clearAllPreferences() async {

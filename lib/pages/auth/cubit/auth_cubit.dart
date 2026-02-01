@@ -5,6 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kailasha/app/app.dart';
 import 'package:kailasha/core/navigator/app_router.gr.dart';
+import 'package:kailasha/core/preference/preference.dart';
+import 'package:kailasha/core/preference/preference_helper.dart';
+import 'package:kailasha/models/user_data/user_data.dart';
 import 'package:kailasha/repository/auth_repo.dart';
 import 'package:kailasha/core/utils/custom_toast.dart';
 import 'package:kailasha/pages/auth/cubit/auth_state.dart';
@@ -13,26 +16,36 @@ import 'package:kailasha/pages/auth/cubit/auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthRepository repository;
 
-  AuthCubit(this.repository) : super(AuthState.initial());
+  AuthCubit(this.repository) : super(AuthState.initial()) {
+    chackAuth();
+  }
 
   Timer? _timer;
+  void chackAuth() async {
+    final userData = await PreferenceHelper.getUserData();
+    emit(state.copyWith(userData: userData));
+  }
 
-  Future<void> signIn({
-    required String phoneNumber,
-    required void Function(String) onCodeSent,
-    required void Function(String) onError,
-  }) async {
+  void onPhoneNumberChanged({required String phoneNumber}) {
+    emit(state.copyWith(phoneNumber: phoneNumber));
+  }
+
+  Future<void> signIn({required String email, required String password}) async {
     try {
-     await repository.sendOtp(
-        phoneNumber: phoneNumber,
-        onCodeSent: onCodeSent,
-        onError: onError,
+      final creds = await repository.signInWithEmail(
+        email: email,
+        password: password,
       );
-      
+      PreferenceHelper.setUserData(
+        UserData(
+          email: email,
+          userId: creds.user?.uid ?? '-',
+          password: password,
+        ),
+      );
       appRouter.replaceAll([HomeRoute()]);
     } catch (e) {
-      log('error in sign in -- $e');
-      AppUtils.customToast(message: e.toString());
+      log('rror in email sign in -- $e');
     }
   }
 
@@ -41,6 +54,13 @@ class AuthCubit extends Cubit<AuthState> {
       log('error in sign in -- $e');
       AppUtils.customToast(message: e.toString());
     }
+  } 
+
+  Future<void> signOut() async {
+    await repository.signOut();
+    PreferenceHelper.clearAllPreferences();
+    Preferences().init();
+    appRouter.replaceAll([SignInForm()]);
   }
 
   //  Start OTP timer
@@ -75,5 +95,36 @@ class AuthCubit extends Cubit<AuthState> {
 
   void onForgotPageChanged({required int index}) {
     emit(state.copyWith(currentForgotPasswordIndex: index));
+  }
+
+  Future<void> createSchoolAccount({
+    required String email,
+    required String password,
+    required String schoolName,
+    required String board,
+    required String city,
+    required String state,
+    required String contactPerson,
+    required List<String> classes,
+  }) async {
+    try {
+      final user = await repository.createSchoolAccount(
+        email: email,
+        password: password,
+        schoolName: schoolName,
+        board: board,
+        city: city,
+        state: state,
+        contactPerson: contactPerson,
+        classes: classes,
+      );
+      PreferenceHelper.setUserData(
+        UserData(email: email, userId: user?.uid ?? '', password: password),
+      );
+      appRouter.replaceAll([HomeRoute()]);
+    } catch (e) {
+      AppUtils.customToast(message: e.toString());
+      log('❌ createSchool failed: $e');
+    }
   }
 }

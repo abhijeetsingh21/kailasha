@@ -6,18 +6,32 @@ import 'package:kailasha/common/clickable_button.dart';
 import 'package:kailasha/common/common_app_bar.dart';
 import 'package:kailasha/common/common_background.dart';
 import 'package:kailasha/common/common_container.dart';
+import 'package:kailasha/common/common_functions.dart';
 import 'package:kailasha/common/gradient_text.dart';
 import 'package:kailasha/core/navigator/app_router.gr.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
 import 'package:kailasha/core/theme/app_text_style.dart';
+import 'package:kailasha/core/utils/common_enums.dart';
 import 'package:kailasha/pages/experiments/cubit/experiments_cubit.dart';
 import 'package:kailasha/pages/experiments/view/experiment_details_page.dart';
 
 @RoutePage()
-class ExperimentPage extends StatelessWidget {
+class ExperimentPage extends StatefulWidget {
   const ExperimentPage({super.key});
 
+  @override
+  State<ExperimentPage> createState() => _ExperimentPageState();
+}
+
+class _ExperimentPageState extends State<ExperimentPage> {
+  late ExperimentsCubit experimentsCubit;
+  @override
+  void initState() {
+    experimentsCubit = context.read<ExperimentsCubit>();
+    experimentsCubit.fetchAllExperiments();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return CommonBackground(
@@ -45,6 +59,9 @@ class ExperimentPage extends StatelessWidget {
       child: CommonContainer(
         child: BlocBuilder<ExperimentsCubit, ExperimentsState>(
           builder: (context, state) {
+            if(state.experimentApiStatus == ApiStatus.loading){
+              return CommonFunctions.progressIndicator();
+            }
             return Column(
               children: [
                 Expanded(

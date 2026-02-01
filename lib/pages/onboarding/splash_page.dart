@@ -42,9 +42,19 @@ class _SplashPageState extends State<SplashPage>
 
     Future.delayed(
       Duration(seconds: 2),
-    ).then((_) => appRouter.replaceAll([SignInForm()]));
+    ).then((_) => navigateBasedOnUserState());
 
     super.initState();
+  }
+
+  void navigateBasedOnUserState() {
+    if (authCubit.state.userData?.userId != null &&
+        authCubit.state.userData?.userId.isNotEmpty == true) {
+      appRouter.replaceAll([HomeRoute()]);  
+    }
+    else{
+      appRouter.replaceAll([SignInForm()]);  
+    }
   }
 
   @override

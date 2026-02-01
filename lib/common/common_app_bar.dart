@@ -4,7 +4,6 @@ import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
 import 'package:kailasha/core/theme/app_text_style.dart';
 
-
 class CommonAppBar extends AppBar {
   CommonAppBar({
     super.key,
@@ -15,10 +14,13 @@ class CommonAppBar extends AppBar {
     bool super.centerTitle = true,
     Color super.backgroundColor = AppColors.white100,
     Color super.surfaceTintColor = AppColors.white100,
+    Function? onBackTap,
     super.actions,
   }) : super(
          elevation: 0,
-         leading: showBackButton ? const CommonBackButton() : SizedBox.shrink(),
+         leading: showBackButton
+             ? CommonBackButton(onTap: onBackTap)
+             : SizedBox.shrink(),
          title:
              titleWidget ??
              Text(

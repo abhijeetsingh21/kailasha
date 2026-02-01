@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kailasha/core/utils/common_enums.dart';
 import 'package:kailasha/models/science_experiment/science_experiment_model.dart';
 import 'package:kailasha/repository/experiment_repo.dart';
 
@@ -14,8 +15,20 @@ class ExperimentsCubit extends Cubit<ExperimentsState> {
   Future<void> onAddExperiment({required ScienceExperiment experiment}) async {
     try {
       await _experimentRepository.addExperiment(experiment);
+      await fetchAllExperiments();
     } catch (e) {
       log('error in add experiment -->$e');
     }
+  }
+
+  Future<void> fetchAllExperiments() async {
+    emit(state.copyWith(experimentApiStatus: ApiStatus.loading));
+    final experiments = await _experimentRepository.fetchAllExperiments();
+    emit(
+      state.copyWith(
+        experiments: experiments,
+        experimentApiStatus: ApiStatus.success,
+      ),
+    );
   }
 }

@@ -31,7 +31,9 @@ class RootBlocInjection extends StatelessWidget {
             providers: [
               BlocProvider<DashboardCubit>(create: (_) => DashboardCubit()),
 
-              BlocProvider<HomeCubit>(create: (_) => HomeCubit()),
+              BlocProvider<HomeCubit>(
+                create: (_) => HomeCubit(authCubit: context.read<AuthCubit>()),
+              ),
               BlocProvider<ExperimentsCubit>(create: (_) => ExperimentsCubit()),
               BlocProvider<ChatCubit>(create: (_) => ChatCubit()),
             ],

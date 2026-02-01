@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/services.dart';
-import 'package:kailasha/common/common_container.dart';
-import 'package:kailasha/common/clickable_button.dart';
 import 'package:kailasha/common/custom_textfield.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
