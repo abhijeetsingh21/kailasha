@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kailasha/app/app.dart';
 import 'package:kailasha/common/clickable_button.dart';
 import 'package:kailasha/common/common_container.dart';
+import 'package:kailasha/common/custom_gradient_button.dart';
 import 'package:kailasha/common/custom_textfield.dart';
 import 'package:kailasha/common/gradient_text.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
@@ -54,7 +55,9 @@ class _AddClassDialogState extends State<AddClassDialog> {
     return Dialog(
       backgroundColor: AppColors.white100,
       insetPadding: EdgeInsets.all(16.widthMultiplier),
+      clipBehavior: Clip.none,
       child: GradientCommonContainer(
+        borderRadius: 24.radiusMultiplier,
         child: Form(
           key: _formKey,
           child: Column(
@@ -112,17 +115,11 @@ class _AddClassDialogState extends State<AddClassDialog> {
                   12.horizontalSpace,
 
                   Expanded(
-                    child: ClickableButton(
-                      onTap: () async {
-                        await _onAdd();
-                      },
-                      child: GradientCommonContainer(
-                        child: Center(
-                          child: GradientText(
-                            text: 'Add',
-                            style: CustomTextStyle.customW600(fontSize: 14),
-                          ),
-                        ),
+                    child: CustomGradientButton(
+                      props: CustomGradientButtonProps(
+                        onTap: _onAdd,
+                        title: 'Add',
+                        titleStyle: CustomTextStyle.customW600(fontSize: 14),
                       ),
                     ),
                   ),
@@ -149,6 +146,7 @@ class _AddClassDialogState extends State<AddClassDialog> {
       section: sectionController.text,
     );
 
-    appRouter.pop(context);
+    await homeCubit.fetchSchoolClasses();
+    appRouter.pop();
   }
 }

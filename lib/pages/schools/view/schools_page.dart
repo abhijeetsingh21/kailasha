@@ -20,14 +20,14 @@ import 'package:kailasha/pages/home/cubit/home_cubit.dart';
 import 'package:kailasha/pages/home/widgets/add_class_dialog.dart';
 
 @RoutePage()
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class SchoolsPage extends StatefulWidget {
+  const SchoolsPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<SchoolsPage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<SchoolsPage> {
   late HomeCubit homeCubit;
   late AuthCubit authCubit;
   @override
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
       canPop: false,
       appBar: CommonAppBar(
         titleWidget: GradientText(
-          text: 'Prayog',
+          text: 'Schools',
           style: CustomTextStyle.customW600(fontSize: 22),
         ),
         actions: [

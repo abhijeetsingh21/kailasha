@@ -50,10 +50,17 @@ class _SplashPageState extends State<SplashPage>
   void navigateBasedOnUserState() {
     if (authCubit.state.userData?.userId != null &&
         authCubit.state.userData?.userId.isNotEmpty == true) {
-      appRouter.replaceAll([HomeRoute()]);  
-    }
-    else{
-      appRouter.replaceAll([SignInForm()]);  
+      // appRouter.replaceAll([HomeRoute()]);
+      if (authCubit.state.userData?.email == 'abhi@gmail.com') {
+        appRouter.replaceAll([DashBoardRoute()]);
+        return;
+      } else {
+        appRouter.replaceAll([HomeRoute()]);
+        return;
+      }
+    } else {
+      appRouter.replaceAll([SignInForm()]);
+      return;
     }
   }
 

@@ -41,4 +41,8 @@ class HomeCubit extends Cubit<HomeState> {
       );
     }
   }
+
+  void callInit() {
+    emit(HomeState.initial());
+  }
 }

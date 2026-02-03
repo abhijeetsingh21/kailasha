@@ -23,7 +23,7 @@ class DashBoardPage extends StatelessWidget {
       // showSafeArea: false,
       child: AutoTabsScaffold(
         inheritNavigatorObservers: false,
-        routes: const [HomeRoute(), HomeRoute(), HomeRoute(), HomeRoute()],
+        routes: const [SchoolsRoute(), SchoolsRoute(), SchoolsRoute(), SchoolsRoute()],
 
         bottomNavigationBuilder: (context, tabsRouter) {
           final cubit = context.read<DashboardCubit>();
@@ -50,7 +50,7 @@ class DashBoardPage extends StatelessWidget {
                   children: [
                     _NavItem(
                       index: 0,
-                      label: 'Home',
+                      label: 'schools',
                       isSelected: currentIndex == 0,
                       onTap: () {
                         if (tabsRouter.activeIndex != 0) {

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:kailasha/app/app.dart';
@@ -36,16 +38,23 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
       );
-      PreferenceHelper.setUserData(
-        UserData(
-          email: email,
-          userId: creds.user?.uid ?? '-',
-          password: password,
-        ),
-      );
-      appRouter.replaceAll([HomeRoute()]);
-    } catch (e) {
-      log('rror in email sign in -- $e');
+
+      if (creds.user != null) {
+        if (email == 'abhi@gmail.com') {
+          appRouter.replaceAll([DashBoardRoute()]);
+        } else {
+          appRouter.replaceAll([HomeRoute()]);
+        }
+        await PreferenceHelper.setUserData(
+          UserData(
+            email: email,
+            userId: creds.user?.uid ?? '-',
+            password: password,
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      log('error in email sign in -- ${e.message}');
     }
   }
 
@@ -54,7 +63,7 @@ class AuthCubit extends Cubit<AuthState> {
       log('error in sign in -- $e');
       AppUtils.customToast(message: e.toString());
     }
-  } 
+  }
 
   Future<void> signOut() async {
     await repository.signOut();
