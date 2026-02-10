@@ -23,7 +23,7 @@ class DashBoardPage extends StatelessWidget {
       // showSafeArea: false,
       child: AutoTabsScaffold(
         inheritNavigatorObservers: false,
-        routes: const [SchoolsRoute(), SchoolsRoute(), SchoolsRoute(), SchoolsRoute()],
+        routes: const [SchoolsRoute(), AdminProfileRoute()],
 
         bottomNavigationBuilder: (context, tabsRouter) {
           final cubit = context.read<DashboardCubit>();
@@ -63,7 +63,7 @@ class DashBoardPage extends StatelessWidget {
                     ),
                     _NavItem(
                       index: 1,
-                      label: 'Earnings',
+                      label: 'Profile',
                       isSelected: currentIndex == 1,
                       onTap: () {
                         tabsRouter.setActiveIndex(1);
@@ -72,30 +72,7 @@ class DashBoardPage extends StatelessWidget {
                           ? AppIcons.earningsGradientIcon
                           : AppIcons.earningIcon,
                     ),
-
-                    _NavItem(
-                      index: 2,
-                      label: 'Notifications',
-                      isSelected: currentIndex == 2,
-                      onTap: () {
-                        tabsRouter.setActiveIndex(2);
-                      },
-                      asset: currentIndex == 2
-                          ? AppIcons.notificationGradientIcon
-                          : AppIcons.notificationIcon,
-                    ),
-                    _NavItem(
-                      index: 3,
-                      label: 'Settings',
-                      isSelected: currentIndex == 3,
-                      onTap: () {
-                        tabsRouter.setActiveIndex(3);
-                      },
-                      asset: currentIndex == 3
-                          ? AppIcons.settingGradientIcon
-                          : AppIcons.settingIcon,
-                    ),
-                  ],
+],
                 ),
               );
             },

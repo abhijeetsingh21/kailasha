@@ -68,11 +68,11 @@ class _AppDropdownState<T> extends State<AppDropdown<T>> {
             offset: Offset(0, size.height - 10.heightMultiplier),
             child: Material(
               elevation: 4,
-              borderRadius: BorderRadius.circular(6.radiusMultiplier),
+              borderRadius: BorderRadius.circular(8.radiusMultiplier),
               child: Container(
                 decoration: BoxDecoration(
                   color: AppColors.white100,
-                  borderRadius: BorderRadius.circular(6.radiusMultiplier),
+                  borderRadius: BorderRadius.circular(8.radiusMultiplier),
                   border: Border.all(color: AppColors.borderColor),
                 ),
                 constraints: BoxConstraints(maxHeight: 220.heightMultiplier),
@@ -128,7 +128,7 @@ class _AppDropdownState<T> extends State<AppDropdown<T>> {
           ),
           decoration: BoxDecoration(
             color: AppColors.white100,
-            borderRadius: BorderRadius.circular(4.radiusMultiplier),
+            borderRadius: BorderRadius.circular(8.radiusMultiplier),
             border: Border.all(color: AppColors.borderColor),
           ),
           child: Row(

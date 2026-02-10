@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kailasha/pages/admin_profile/cubit/admin_profile_cubit.dart';
 import 'package:kailasha/pages/experiments/cubit/experiments_cubit.dart';
+import 'package:kailasha/pages/schools/cubit/schools_cubit.dart';
 import 'package:kailasha/repository/auth_repo.dart';
 import 'package:kailasha/core/user_notifier/cubit/user_cubit.dart';
 import 'package:kailasha/pages/auth/cubit/auth_cubit.dart';
@@ -34,6 +36,8 @@ class RootBlocInjection extends StatelessWidget {
               BlocProvider<HomeCubit>(
                 create: (_) => HomeCubit(authCubit: context.read<AuthCubit>()),
               ),
+              BlocProvider<SchoolsCubit>(create: (_) => SchoolsCubit()),
+              BlocProvider<AdminProfileCubit>(create: (_) => AdminProfileCubit()),
               BlocProvider<ExperimentsCubit>(create: (_) => ExperimentsCubit()),
               BlocProvider<ChatCubit>(create: (_) => ChatCubit()),
             ],

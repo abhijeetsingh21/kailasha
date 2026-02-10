@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
-import 'package:kailasha/models/user_data/user_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthState extends Equatable {
   final int remainingSeconds;
   final String phoneNumber;
   final bool canResend;
   final int currentForgotPasswordIndex;
-  final UserData? userData;
+  final User? userData;
   const AuthState({
     required this.remainingSeconds,
     required this.canResend,
@@ -30,7 +30,7 @@ class AuthState extends Equatable {
     bool? canResend,
     int? currentForgotPasswordIndex,
     String? phoneNumber,
-    UserData? userData,
+    User? userData,
   }) {
     return AuthState(
       canResend: canResend ?? this.canResend,

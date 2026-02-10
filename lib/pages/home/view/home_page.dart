@@ -16,13 +16,20 @@ import 'package:kailasha/core/theme/app_text_style.dart';
 import 'package:kailasha/core/utils/common_enums.dart';
 import 'package:kailasha/models/custom_button_props_model/custom_button_props_model.dart';
 import 'package:kailasha/pages/auth/cubit/auth_cubit.dart';
+import 'package:kailasha/pages/experiments/view/experiment_page.dart';
 import 'package:kailasha/pages/home/cubit/home_cubit.dart';
 import 'package:kailasha/pages/home/widgets/add_class_dialog.dart';
 
+class HomePageParams {
+  final String? schoolId;
+  final String? schoolName;
+  HomePageParams({this.schoolId, this.schoolName});
+} 
+
 @RoutePage()
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
+  const HomePage({super.key, required this.params});
+  final HomePageParams params;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -35,38 +42,42 @@ class _HomePageState extends State<HomePage> {
     homeCubit = context.read<HomeCubit>();
     authCubit = context.read<AuthCubit>();
     homeCubit.callInit();
-    homeCubit.fetchSchoolClasses();
+    homeCubit.fetchSchoolClasses(schoolId: widget.params.schoolId);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return CommonBackground(
-      canPop: false,
+      canPop: widget.params.schoolId == null ? false : true,
       appBar: CommonAppBar(
+        showBackButton: widget.params.schoolId == null ? false : true,
         titleWidget: GradientText(
-          text: 'Prayog',
+          text: widget.params.schoolName == null
+              ? 'Prayog'
+              : (widget.params.schoolName ?? ''),
           style: CustomTextStyle.customW600(fontSize: 22),
         ),
+
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.widthMultiplier),
-            child: ClickableButton(
-              onTap: () {
-                AddClassDialog.showAddDialog(
-                  context: context,
-                  onAdd: (val1, val2) {},
-                );
-              },
-              child: Icon(
-                Icons.add,
-                size: 30.heightMultiplier,
-                color: AppColors.textgradient[1],
+          if (widget.params.schoolId == null)
+            Padding(
+              padding: EdgeInsets.only(right: 16.widthMultiplier),
+              child: ClickableButton(
+                onTap: () {
+                  AddClassDialog.showAddDialog(
+                    context: context,
+                    onAdd: (val1, val2) {},
+                  );
+                },
+                child: Icon(
+                  Icons.add,
+                  size: 30.heightMultiplier,
+                  color: AppColors.textgradient[1],
+                ),
               ),
             ),
-          ),
         ],
-        showBackButton: false,
       ),
       child: CommonContainer(
         child: BlocBuilder<HomeCubit, HomeState>(
@@ -86,18 +97,21 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
 
-                  CustomButton(
-                    props: CustomButtonPropsModel(
-                      onPressed: () async {
-                        await authCubit.signOut();
-                      },
-                      text: 'Log out',
-                      textStyle: CustomTextStyle.customW500(
-                        fontSize: 16,
-                        color: AppColors.white100,
+                  if (widget.params.schoolId == null) ...[
+                    10.verticalSpace,
+                    CustomButton(
+                      props: CustomButtonPropsModel(
+                        onPressed: () async {
+                          await authCubit.signOut();
+                        },
+                        text: 'Log out',
+                        textStyle: CustomTextStyle.customW500(
+                          fontSize: 16,
+                          color: AppColors.white100,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
               );
             }
@@ -114,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                       final currentClass = state.classes[index];
                       return ClickableButton(
                         onTap: () {
-                          appRouter.push(ExperimentRoute());
+                          appRouter.push(ExperimentRoute(parms: ExperimentPageParams(classLevel: currentClass.name)));
                         },
                         child: GradientCommonContainer(
                           child: Row(
@@ -141,19 +155,21 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
-                10.verticalSpace,
-                CustomButton(
-                  props: CustomButtonPropsModel(
-                    onPressed: () async {
-                      await authCubit.signOut();
-                    },
-                    text: 'Log out',
-                    textStyle: CustomTextStyle.customW500(
-                      fontSize: 16,
-                      color: AppColors.white100,
+                if (widget.params.schoolId == null) ...[
+                  10.verticalSpace,
+                  CustomButton(
+                    props: CustomButtonPropsModel(
+                      onPressed: () async {
+                        await authCubit.signOut();
+                      },
+                      text: 'Log out',
+                      textStyle: CustomTextStyle.customW500(
+                        fontSize: 16,
+                        color: AppColors.white100,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
             );
           },

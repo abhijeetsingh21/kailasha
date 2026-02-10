@@ -38,4 +38,17 @@ class ExperimentRepository {
     }
     return null;
   }
+
+  Future<List<ScienceExperiment>> fetchExperimentsByClassLevel({
+    required String classLevel,
+  }) async {
+    final snapshot = await _firestore
+        .collection('experiments')
+        .where('classLevel', isEqualTo: classLevel)
+        .where('isActive', isEqualTo: true)
+        .orderBy('createdAt', descending: true)
+        .get();
+
+    return snapshot.docs.map(ScienceExperiment.fromFirestore).toList();
+  }
 }

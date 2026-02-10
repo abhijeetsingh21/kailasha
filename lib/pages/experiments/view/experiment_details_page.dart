@@ -129,7 +129,7 @@ class _MaterialsSection extends StatelessWidget {
 }
 
 class _ObservationsSection extends StatelessWidget {
-  final List observations;
+  final List<Observation> observations;
 
   const _ObservationsSection({required this.observations});
 
@@ -147,14 +147,10 @@ class _ObservationsSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${o.distanceCm} cm',
+                    o.observation,
                     style: CustomTextStyle.size13W600(),
                   ),
-                  Text(o.lightIntensity, style: CustomTextStyle.size14W500()),
-                  Text(
-                    '${o.oxygenBubblesPerMinute}',
-                    style: CustomTextStyle.size13W600(),
-                  ),
+                  
                 ],
               ),
             ),

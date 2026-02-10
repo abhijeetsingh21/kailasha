@@ -9,7 +9,7 @@ class CommonFunctions {
         height: size ?? 34,
         child: CircularProgressIndicator(
           color: color ?? AppColors.primary,
-          strokeWidth: 2,
+          strokeWidth: 3,
         ),
       ),
     );

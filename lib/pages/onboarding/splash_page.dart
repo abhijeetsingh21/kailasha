@@ -9,6 +9,7 @@ import 'package:kailasha/core/navigator/app_router.gr.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
 import 'package:kailasha/pages/auth/cubit/auth_cubit.dart';
+import 'package:kailasha/pages/home/view/home_page.dart';
 
 @RoutePage()
 class SplashPage extends StatefulWidget {
@@ -48,14 +49,14 @@ class _SplashPageState extends State<SplashPage>
   }
 
   void navigateBasedOnUserState() {
-    if (authCubit.state.userData?.userId != null &&
-        authCubit.state.userData?.userId.isNotEmpty == true) {
+    if (authCubit.state.userData?.uid != null &&
+        authCubit.state.userData?.uid.isNotEmpty == true) {
       // appRouter.replaceAll([HomeRoute()]);
       if (authCubit.state.userData?.email == 'abhi@gmail.com') {
         appRouter.replaceAll([DashBoardRoute()]);
         return;
       } else {
-        appRouter.replaceAll([HomeRoute()]);
+        appRouter.replaceAll([HomeRoute(params: HomePageParams())]);
         return;
       }
     } else {

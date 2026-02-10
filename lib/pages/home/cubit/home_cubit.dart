@@ -16,23 +16,22 @@ class HomeCubit extends Cubit<HomeState> {
     required String className, // e.g. "Class 8"
     String? section,
   }) async {
-    final userId = authCubit.state.userData?.userId;
+    final userId =  authCubit.state.userData?.uid;
     if (userId != null && userId.isNotEmpty == true) {
       await homeRepo.addClassToSchool(
         className: className,
-        schoolId: authCubit.state.userData?.userId ?? '',
+        schoolId: userId,
         section: section,
       );
+      await fetchSchoolClasses();
     }
   }
 
-  Future<void> fetchSchoolClasses() async {
-    final userId = authCubit.state.userData?.userId;
+  Future<void> fetchSchoolClasses({String? schoolId}) async {
+    final userId = schoolId ?? authCubit.state.userData?.uid;
     if (userId != null && userId.isNotEmpty == true) {
       emit(state.copyWith(homeApiStatus: ApiStatus.loading));
-      final schoolClasses = await homeRepo.fetchSchoolClasses(
-        schoolId: authCubit.state.userData?.userId ?? '',
-      );
+      final schoolClasses = await homeRepo.fetchSchoolClasses(schoolId: userId);
       emit(
         state.copyWith(
           classes: schoolClasses,

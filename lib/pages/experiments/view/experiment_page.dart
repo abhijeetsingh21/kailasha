@@ -16,9 +16,15 @@ import 'package:kailasha/core/utils/common_enums.dart';
 import 'package:kailasha/pages/experiments/cubit/experiments_cubit.dart';
 import 'package:kailasha/pages/experiments/view/experiment_details_page.dart';
 
+class ExperimentPageParams {
+  final String classLevel;
+  ExperimentPageParams({required this.classLevel});
+}
+
 @RoutePage()
 class ExperimentPage extends StatefulWidget {
-  const ExperimentPage({super.key});
+  final ExperimentPageParams parms;
+  const ExperimentPage({super.key, required this.parms});
 
   @override
   State<ExperimentPage> createState() => _ExperimentPageState();
@@ -29,9 +35,10 @@ class _ExperimentPageState extends State<ExperimentPage> {
   @override
   void initState() {
     experimentsCubit = context.read<ExperimentsCubit>();
-    experimentsCubit.fetchAllExperiments();
+    experimentsCubit.fetchAllExperiments(classLevel: widget.parms.classLevel);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return CommonBackground(
@@ -40,27 +47,35 @@ class _ExperimentPageState extends State<ExperimentPage> {
           text: 'Experiments',
           style: CustomTextStyle.customW600(fontSize: 22),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.widthMultiplier),
-            child: ClickableButton(
-              onTap: () {
-                appRouter.push(AddExperimentRoute());
-              },
-              child: Icon(
-                Icons.add,
-                size: 30.heightMultiplier,
-                color: AppColors.textgradient[1],
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 16.widthMultiplier),
+        //     child: ClickableButton(
+        //       onTap: () {
+        //         appRouter.push(AddExperimentRoute());
+        //       },
+        //       child: Icon(
+        //         Icons.add,
+        //         size: 30.heightMultiplier,
+        //         color: AppColors.textgradient[1],
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ),
       child: CommonContainer(
         child: BlocBuilder<ExperimentsCubit, ExperimentsState>(
           builder: (context, state) {
-            if(state.experimentApiStatus == ApiStatus.loading){
+            if (state.experimentApiStatus == ApiStatus.loading) {
               return CommonFunctions.progressIndicator();
+            }
+            if (state.experiments.isEmpty) {
+              return Center(
+                child: Text(
+                  'No Experiments Yet!',
+                  style: CustomTextStyle.customW500(fontSize: 16),
+                ),
+              );
             }
             return Column(
               children: [

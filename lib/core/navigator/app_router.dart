@@ -12,10 +12,14 @@ class AppRouter extends RootStackRouter {
 
     autoRouteComponent(
       page: DashBoardRoute.page,
-      children: [autoRouteComponent(page: SchoolsRoute.page, initial: true)],
+      children: [
+        autoRouteComponent(page: SchoolsRoute.page, initial: true),
+        autoRouteComponent(page: AdminProfileRoute.page),
+      ],
     ),
 
     autoRouteComponent(page: SignInForm.page),
+
     autoRouteComponent(page: SchoolsRoute.page),
     autoRouteComponent(page: SignUpRoute.page),
     autoRouteComponent(page: ExperimentRoute.page),

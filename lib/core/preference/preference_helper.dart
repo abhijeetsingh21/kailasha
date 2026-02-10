@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kailasha/core/preference/preference.dart';
-import 'package:kailasha/models/user_data/user_data.dart';
 
 class PreferenceHelper {
   static const userEmail = "user_email";
@@ -108,15 +108,15 @@ class PreferenceHelper {
   }
 
   //User data methods
-  static setUserData(UserData? model) async {
-    final data = jsonEncode(model?.toJson());
+  static setUserData(User? model) async {
+    final data = jsonEncode(model);
     await Preferences().setString(userData, data);
   }
 
-  static Future<UserData?> getUserData() async {
+  static Future<User?> getUserData() async {
     final localUserData = await Preferences().getString(userData, null);
     if (localUserData != null) {
-      final data = UserData.fromJson(jsonDecode(localUserData));
+      final data = (jsonDecode(localUserData));
       return data;
     }
   }

@@ -23,7 +23,7 @@ class AuthRepository {
     required String city,
     required String state,
     required String contactPerson,
-    required List<String> classes,
+    // required List<String> classes,
   }) async {
     try {
       /// 1️⃣ Create auth user
@@ -45,7 +45,7 @@ class AuthRepository {
         'state': state,
         'contactPerson': contactPerson,
         'email': email,
-        'classes': classes,
+        // 'classes': classes,
         'role': 'school',
         'createdBy': user.uid,
         'createdAt': FieldValue.serverTimestamp(),
@@ -113,5 +113,9 @@ class AuthRepository {
       default:
         return 'Authentication failed. Please try again';
     }
+  }
+  Future<User?> fetchCurrentUser()async{
+    final user = _auth.currentUser;
+    return user;
   }
 }

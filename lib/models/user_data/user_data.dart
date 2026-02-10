@@ -1,16 +1,16 @@
-class UserData {
+class User {
   final String email;
   final String password;
   final String userId;
 
-  UserData({
+  User({
     required this.email,
     required this.userId,
     required this.password,
   });
 
-  factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
       email: json['email'] as String,
       userId: json['userId'] as String,
       password: json['password'] as String,

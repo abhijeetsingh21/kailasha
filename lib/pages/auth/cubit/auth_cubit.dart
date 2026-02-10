@@ -9,7 +9,8 @@ import 'package:kailasha/app/app.dart';
 import 'package:kailasha/core/navigator/app_router.gr.dart';
 import 'package:kailasha/core/preference/preference.dart';
 import 'package:kailasha/core/preference/preference_helper.dart';
-import 'package:kailasha/models/user_data/user_data.dart';
+import 'package:kailasha/models/user_data/user_data.dart' hide User;
+import 'package:kailasha/pages/home/view/home_page.dart';
 import 'package:kailasha/repository/auth_repo.dart';
 import 'package:kailasha/core/utils/custom_toast.dart';
 import 'package:kailasha/pages/auth/cubit/auth_state.dart';
@@ -24,8 +25,11 @@ class AuthCubit extends Cubit<AuthState> {
 
   Timer? _timer;
   void chackAuth() async {
-    final userData = await PreferenceHelper.getUserData();
-    emit(state.copyWith(userData: userData));
+    final user = await repository.fetchCurrentUser();
+    if (user != null) {
+    
+      emit(state.copyWith(userData: user));
+    }
   }
 
   void onPhoneNumberChanged({required String phoneNumber}) {
@@ -43,15 +47,15 @@ class AuthCubit extends Cubit<AuthState> {
         if (email == 'abhi@gmail.com') {
           appRouter.replaceAll([DashBoardRoute()]);
         } else {
-          appRouter.replaceAll([HomeRoute()]);
+          appRouter.replaceAll([HomeRoute(params: HomePageParams())]);
         }
-        await PreferenceHelper.setUserData(
-          UserData(
-            email: email,
-            userId: creds.user?.uid ?? '-',
-            password: password,
-          ),
-        );
+        // await PreferenceHelper.setUserData(
+        //   User(
+        //     email: email,
+        //     userId: creds.user?.uid ?? '-',
+        //     password: password,
+        //   ),
+        // );
       }
     } on FirebaseAuthException catch (e) {
       log('error in email sign in -- ${e.message}');
@@ -114,7 +118,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String city,
     required String state,
     required String contactPerson,
-    required List<String> classes,
+    // required List<String> classes,
   }) async {
     try {
       final user = await repository.createSchoolAccount(
@@ -125,12 +129,12 @@ class AuthCubit extends Cubit<AuthState> {
         city: city,
         state: state,
         contactPerson: contactPerson,
-        classes: classes,
+        // classes: classes,
       );
-      PreferenceHelper.setUserData(
-        UserData(email: email, userId: user?.uid ?? '', password: password),
-      );
-      appRouter.replaceAll([HomeRoute()]);
+      // PreferenceHelper.setUserData(
+      //   User(email: email, userId: user?.uid ?? '', password: password),
+      // );
+      appRouter.replaceAll([HomeRoute(params: HomePageParams())]);
     } catch (e) {
       AppUtils.customToast(message: e.toString());
       log('❌ createSchool failed: $e');

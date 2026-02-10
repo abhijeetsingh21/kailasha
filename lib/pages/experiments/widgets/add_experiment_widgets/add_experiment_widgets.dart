@@ -86,29 +86,29 @@ class DynamicObservationSection extends StatelessWidget {
 }
 
 class ObservationControllers {
-  final distanceController = TextEditingController();
-  final intensityController = TextEditingController();
-  final bubblesController = TextEditingController();
+  final observationController = TextEditingController();
+  // final intensityController = TextEditingController();
+  // final bubblesController = TextEditingController();
 
   Widget build() {
     return Column(
       children: [
         CustomTextField(
-          controller: distanceController,
-          hintText: 'Distance (cm)',
+          controller: observationController,
+          hintText: 'Observation',
           keyboardType: TextInputType.number,
         ),
-        8.verticalSpace,
-        CustomTextField(
-          controller: intensityController,
-          hintText: 'Light Intensity',
-        ),
-        8.verticalSpace,
-        CustomTextField(
-          controller: bubblesController,
-          hintText: 'Oxygen Bubbles / Minute',
-          keyboardType: TextInputType.number,
-        ),
+        // 8.verticalSpace,
+        // CustomTextField(
+        //   controller: intensityController,
+        //   hintText: 'Light Intensity',
+        // ),
+        // 8.verticalSpace,
+        // CustomTextField(
+        //   controller: bubblesController,
+        //   hintText: 'Oxygen Bubbles / Minute',
+        //   keyboardType: TextInputType.number,
+        // ),
         12.verticalSpace,
       ],
     );
@@ -116,16 +116,16 @@ class ObservationControllers {
 
   Observation toObservation() {
     return Observation(
-      distanceCm: int.tryParse(distanceController.text) ?? 0,
-      lightIntensity: intensityController.text,
-      oxygenBubblesPerMinute: int.tryParse(bubblesController.text) ?? 0,
+      observation: observationController.text,
+      // distanceCm: int.tryParse(distanceController.text) ?? 0,
+      // oxygenBubblesPerMinute: int.tryParse(bubblesController.text) ?? 0,
     );
   }
 
   void dispose() {
-    distanceController.dispose();
-    intensityController.dispose();
-    bubblesController.dispose();
+    observationController.dispose();
+    // intensityController.dispose();
+    // bubblesController.dispose();
   }
 }
 

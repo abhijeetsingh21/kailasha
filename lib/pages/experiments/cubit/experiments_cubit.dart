@@ -12,18 +12,24 @@ class ExperimentsCubit extends Cubit<ExperimentsState> {
   ExperimentsCubit() : super(ExperimentsState.initial());
   final _experimentRepository = ExperimentRepository();
 
-  Future<void> onAddExperiment({required ScienceExperiment experiment}) async {
-    try {
-      await _experimentRepository.addExperiment(experiment);
-      await fetchAllExperiments();
-    } catch (e) {
-      log('error in add experiment -->$e');
-    }
-  }
+  // Future<void> onAddExperiment({required ScienceExperiment experiment}) async {
+  //   try {
+  //     await _experimentRepository.addExperiment(experiment);
+  //     await fetchAllExperiments(classLevel: state.currentClass);
+  //   } catch (e) {
+  //     log('error in add experiment -->$e');
+  //   }
+  // }
 
-  Future<void> fetchAllExperiments() async {
-    emit(state.copyWith(experimentApiStatus: ApiStatus.loading));
-    final experiments = await _experimentRepository.fetchAllExperiments();
+  Future<void> fetchAllExperiments({required String classLevel}) async {
+    emit(
+      state.copyWith(
+        experimentApiStatus: ApiStatus.loading,
+        currentClass: classLevel,
+      ),
+    );
+    final experiments = await _experimentRepository
+        .fetchExperimentsByClassLevel(classLevel: classLevel);
     emit(
       state.copyWith(
         experiments: experiments,

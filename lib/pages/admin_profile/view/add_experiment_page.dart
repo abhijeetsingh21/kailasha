@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kailasha/app/app.dart';
+import 'package:kailasha/common/app_dopdown.dart';
 import 'package:kailasha/common/common_app_bar.dart';
 import 'package:kailasha/common/common_background.dart';
 import 'package:kailasha/common/custom_gradient_button.dart';
@@ -9,7 +10,9 @@ import 'package:kailasha/common/gradient_text.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
 import 'package:kailasha/core/theme/app_size.dart';
 import 'package:kailasha/core/theme/app_text_style.dart';
+import 'package:kailasha/core/utils/custom_toast.dart';
 import 'package:kailasha/models/science_experiment/science_experiment_model.dart';
+import 'package:kailasha/pages/admin_profile/cubit/admin_profile_cubit.dart';
 import 'package:kailasha/pages/experiments/cubit/experiments_cubit.dart';
 import 'package:kailasha/pages/experiments/widgets/add_experiment_widgets/add_experiment_widgets.dart';
 
@@ -22,8 +25,9 @@ class AddExperimentPage extends StatefulWidget {
 }
 
 class _AddExperimentPageState extends State<AddExperimentPage> {
-  late ExperimentsCubit experimentsCubit;
+  late AdminProfileCubit adminProfileCubit;
   final _formKey = GlobalKey<FormState>();
+  String? selectedClass;
 
   /// Basic fields
   final titleController = TextEditingController();
@@ -40,7 +44,7 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
 
   @override
   void initState() {
-    experimentsCubit = context.read<ExperimentsCubit>();
+    adminProfileCubit = context.read<AdminProfileCubit>();
     super.initState();
   }
 
@@ -87,7 +91,26 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
                 children: [
                   Field('Title', titleController),
                   Field('Subject', subjectController),
-                  Field('Class Level', classLevelController),
+
+                  // Class Level
+                  AppDropdown(
+                    list: [
+                      'Class 6',
+                      'Class 7',
+                      'Class 8',
+                      'Class 9',
+                      'Class 10',
+                      'Class 11',
+                      'Class 12',
+                    ],
+                    hintText: 'Select Class',
+                    callback: (val) {
+                      setState(() {
+                        selectedClass = val;
+                      });
+                    },
+                  ),
+                  12.verticalSpace,
                   Field('Aim', aimController, maxLines: 3),
                   Field('Theory', theoryController, maxLines: 5),
                 ],
@@ -145,12 +168,16 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
 
   Future<void> _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
-
+    if(selectedClass == null){
+      AppUtils.customToast(message: 'Please select class!');
+    return;
+    } 
+  
     final experiment = ScienceExperiment(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: titleController.text,
       subject: subjectController.text,
-      classLevel: classLevelController.text,
+      classLevel: selectedClass ?? '',
       aim: aimController.text,
       theory: theoryController.text,
       materials: materialControllers.map((c) => c.text).toList(),
@@ -162,7 +189,7 @@ class _AddExperimentPageState extends State<AddExperimentPage> {
     );
 
     try {
-      await experimentsCubit.onAddExperiment(experiment: experiment);
+      await adminProfileCubit.onAddExperiment(experiment: experiment,);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -2,6 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kailasha/app/app.dart';
+import 'package:kailasha/common/app_dopdown.dart';
 import 'package:kailasha/common/common_app_bar.dart';
 import 'package:kailasha/common/common_background.dart';
 import 'package:kailasha/common/common_container.dart';
@@ -35,7 +36,7 @@ class _SchoolSignupPageState extends State<SchoolSignupPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  final List<TextEditingController> classControllers = [];
+  // final List<AppDropdown> classControllers = [];
 
   @override
   void initState() {
@@ -51,9 +52,7 @@ class _SchoolSignupPageState extends State<SchoolSignupPage> {
     stateController.dispose();
     contactPersonController.dispose();
     emailController.dispose();
-    for (final c in classControllers) {
-      c.dispose();
-    }
+    // classControllers.clear();
     super.dispose();
   }
 
@@ -86,12 +85,14 @@ class _SchoolSignupPageState extends State<SchoolSignupPage> {
                 ],
               ),
 
-              _DynamicClassSection(
-                controllers: classControllers,
-                onAdd: () => setState(() {
-                  classControllers.add(TextEditingController());
-                }),
-              ),
+              // _DynamicClassSection(
+              //   controllers: classControllers,
+              //   onAdd: () => setState(() {
+              //     classControllers.add(
+              //       AppDropdown(list: ['Class 8'], callback: (val) {}),
+              //     );
+              //   }),
+              // ),
 
               _Section(
                 title: 'Contact Details',
@@ -140,10 +141,10 @@ class _SchoolSignupPageState extends State<SchoolSignupPage> {
       contactPerson: contactPersonController.text.trim(),
       email: emailController.text.trim(),
       password: passwordController.text,
-      classes: classControllers
-          .map((c) => c.text.trim())
-          .where((e) => e.isNotEmpty)
-          .toList(),
+      // classes: classControllers
+      //     .map((c) => c.selectedValue?.trim() ?? '')
+      //     .where((e) => e.isNotEmpty)
+      //     .toList(),
     );
   }
 }
@@ -206,36 +207,41 @@ class _Field extends StatelessWidget {
   }
 }
 
-class _DynamicClassSection extends StatelessWidget {
-  final List<TextEditingController> controllers;
-  final VoidCallback onAdd;
+// class _DynamicClassSection extends StatelessWidget {
+//   final List<AppDropdown> controllers;
+//   final Function() onAdd;
 
-  const _DynamicClassSection({required this.controllers, required this.onAdd});
+//   const _DynamicClassSection({required this.controllers, required this.onAdd});
 
-  @override
-  Widget build(BuildContext context) {
-    return _Section(
-      title: 'Classes Available',
-      children: [
-        ...controllers.map(
-          (c) => Padding(
-            padding: EdgeInsets.only(bottom: 8.heightMultiplier),
-            child: CustomTextField(
-              controller: c,
-              hintText: 'Class (e.g. Class 8)',
-            ),
-          ),
-        ),
-        ClickableButton(
-          onTap: onAdd,
-          child: Text(
-            '+ Add Class',
-            style: CustomTextStyle.size13W600(
-              color: AppColors.textgradient.first,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return _Section(
+//       title: 'Classes Available',
+//       children: [
+//         ...controllers.map(
+//           (c) => Padding(
+//             padding: EdgeInsets.only(bottom: 8.heightMultiplier),
+//             child: AppDropdown(
+//               list: ['Class 8'],
+//               callback: (val) {},
+//               hintText: 'Choose Class',
+//             ),
+//             // CustomTextField(
+//             //   controller: c,
+//             //   hintText: 'Class (e.g. Class 8)',
+//             // ),
+//           ),
+//         ),
+//         ClickableButton(
+//           onTap: onAdd,
+//           child: Text(
+//             '+ Add Class',
+//             style: CustomTextStyle.size13W600(
+//               color: AppColors.textgradient.first,
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

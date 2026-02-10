@@ -16,26 +16,26 @@ import 'package:kailasha/core/theme/app_text_style.dart';
 import 'package:kailasha/core/utils/common_enums.dart';
 import 'package:kailasha/models/custom_button_props_model/custom_button_props_model.dart';
 import 'package:kailasha/pages/auth/cubit/auth_cubit.dart';
-import 'package:kailasha/pages/home/cubit/home_cubit.dart';
+import 'package:kailasha/pages/home/view/home_page.dart';
 import 'package:kailasha/pages/home/widgets/add_class_dialog.dart';
+import 'package:kailasha/pages/schools/cubit/schools_cubit.dart';
 
 @RoutePage()
 class SchoolsPage extends StatefulWidget {
   const SchoolsPage({super.key});
 
   @override
-  State<SchoolsPage> createState() => _HomePageState();
+  State<SchoolsPage> createState() => _SchoolPageState();
 }
 
-class _HomePageState extends State<SchoolsPage> {
-  late HomeCubit homeCubit;
+class _SchoolPageState extends State<SchoolsPage> {
+  late SchoolsCubit schoolsCubit;
   late AuthCubit authCubit;
   @override
   void initState() {
-    homeCubit = context.read<HomeCubit>();
+    schoolsCubit = context.read<SchoolsCubit>();
     authCubit = context.read<AuthCubit>();
-    homeCubit.callInit();
-    homeCubit.fetchSchoolClasses();
+    schoolsCubit.fetchAllSchoolsAsAdmin();
     super.initState();
   }
 
@@ -48,56 +48,28 @@ class _HomePageState extends State<SchoolsPage> {
           text: 'Schools',
           style: CustomTextStyle.customW600(fontSize: 22),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.widthMultiplier),
-            child: ClickableButton(
-              onTap: () {
-                AddClassDialog.showAddDialog(
-                  context: context,
-                  onAdd: (val1, val2) {},
-                );
-              },
-              child: Icon(
-                Icons.add,
-                size: 30.heightMultiplier,
-                color: AppColors.textgradient[1],
-              ),
-            ),
-          ),
-        ],
+        
         showBackButton: false,
       ),
       child: CommonContainer(
-        child: BlocBuilder<HomeCubit, HomeState>(
+        child: BlocBuilder<SchoolsCubit, SchoolsState>(
           builder: (context, state) {
-            if (state.homeApiStatus == ApiStatus.loading) {
+            if (state.schoolsApiStatus == ApiStatus.loading) {
               return CommonFunctions.progressIndicator();
             }
-            if (state.classes.isEmpty) {
+            if (state.schools.isEmpty) {
               return Column(
                 children: [
                   Expanded(
                     child: Center(
                       child: Text(
-                        'No Classes Yet',
+                        'No Schools Yet',
                         style: CustomTextStyle.customW500(fontSize: 16),
                       ),
                     ),
                   ),
 
-                  CustomButton(
-                    props: CustomButtonPropsModel(
-                      onPressed: () async {
-                        await authCubit.signOut();
-                      },
-                      text: 'Log out',
-                      textStyle: CustomTextStyle.customW500(
-                        fontSize: 16,
-                        color: AppColors.white100,
-                      ),
-                    ),
-                  ),
+                
                 ],
               );
             }
@@ -105,16 +77,23 @@ class _HomePageState extends State<SchoolsPage> {
               children: [
                 Expanded(
                   child: ListView.separated(
-                    itemCount: state.classes.length,
+                    itemCount: state.schools.length,
                     shrinkWrap: true,
                     separatorBuilder: (context, index) {
                       return 10.verticalSpace;
                     },
                     itemBuilder: (context, index) {
-                      final currentClass = state.classes[index];
+                      final currentSchool = state.schools[index];
                       return ClickableButton(
                         onTap: () {
-                          appRouter.push(ExperimentRoute());
+                          appRouter.push(
+                            HomeRoute(
+                              params: HomePageParams(
+                                schoolId: currentSchool.id,
+                                schoolName: currentSchool.name
+                              ),
+                            ),
+                          );
                         },
                         child: GradientCommonContainer(
                           child: Row(
@@ -126,11 +105,29 @@ class _HomePageState extends State<SchoolsPage> {
                               ),
                               Expanded(
                                 child: Center(
-                                  child: GradientText(
-                                    text: currentClass.name,
-                                    style: CustomTextStyle.customW500(
-                                      fontSize: 20,
-                                    ),
+                                  child: Column(
+                                    children: [
+                                      GradientText(
+                                        text: currentSchool.name,
+                                        style: CustomTextStyle.customW500(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      5.verticalSpace,
+                                      GradientText(
+                                        text: currentSchool.city,
+                                        style: CustomTextStyle.customW500(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      5.verticalSpace,
+                                      GradientText(
+                                        text: currentSchool.email,
+                                        style: CustomTextStyle.customW500(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -141,19 +138,7 @@ class _HomePageState extends State<SchoolsPage> {
                     },
                   ),
                 ),
-                10.verticalSpace,
-                CustomButton(
-                  props: CustomButtonPropsModel(
-                    onPressed: () async {
-                      await authCubit.signOut();
-                    },
-                    text: 'Log out',
-                    textStyle: CustomTextStyle.customW500(
-                      fontSize: 16,
-                      color: AppColors.white100,
-                    ),
-                  ),
-                ),
+                
               ],
             );
           },
