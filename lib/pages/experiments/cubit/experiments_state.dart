@@ -2,7 +2,7 @@ part of 'experiments_cubit.dart';
 
 class ExperimentsState extends Equatable {
   final ApiStatus experimentApiStatus;
-  final List<ScienceExperiment> experiments;
+  final List<MergedExperiment> experiments;
   final String currentClass;
 
   const ExperimentsState({
@@ -20,7 +20,7 @@ class ExperimentsState extends Equatable {
   }
 
   ExperimentsState copyWith({
-    List<ScienceExperiment>? experiments,
+    List<MergedExperiment>? experiments,
     ApiStatus? experimentApiStatus,
     String? currentClass,
   }) {

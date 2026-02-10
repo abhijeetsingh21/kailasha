@@ -10,31 +10,70 @@ part 'experiments_state.dart';
 
 class ExperimentsCubit extends Cubit<ExperimentsState> {
   ExperimentsCubit() : super(ExperimentsState.initial());
+
   final _experimentRepository = ExperimentRepository();
 
-  // Future<void> onAddExperiment({required ScienceExperiment experiment}) async {
-  //   try {
-  //     await _experimentRepository.addExperiment(experiment);
-  //     await fetchAllExperiments(classLevel: state.currentClass);
-  //   } catch (e) {
-  //     log('error in add experiment -->$e');
-  //   }
-  // }
-
-  Future<void> fetchAllExperiments({required String classLevel}) async {
+  Future<void> fetchClassExperiments({
+    String? schoolId,
+    required String classLevel,
+  }) async {
     emit(
       state.copyWith(
         experimentApiStatus: ApiStatus.loading,
         currentClass: classLevel,
       ),
     );
-    final experiments = await _experimentRepository
-        .fetchExperimentsByClassLevel(classLevel: classLevel);
-    emit(
-      state.copyWith(
-        experiments: experiments,
-        experimentApiStatus: ApiStatus.success,
-      ),
-    );
+
+    try {
+      final experiments = await _experimentRepository
+          .fetchExperimentsByClassLevel(classLevel: classLevel);
+
+      final progressMap = await _experimentRepository
+          .fetchClassExperimentProgress(
+            schoolId: schoolId,
+            classLevel: classLevel,
+          );
+
+      final merged = experiments.map((exp) {
+        final progress = progressMap[exp.id];
+
+        return MergedExperiment(
+          experiment: exp,
+          isPerformed: progress?.isPerformed ?? false,
+          performedAt: progress?.performedAt,
+        );
+      }).toList();
+
+      emit(
+        state.copyWith(
+          experiments: merged,
+          experimentApiStatus: ApiStatus.success,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(experimentApiStatus: ApiStatus.failed));
+    }
+  }
+
+  Future<bool> markExperimentPerformed({
+    String? schoolId,
+    required String classLevel,
+    required String experimentId,
+    String? remarks,
+  }) async {
+    try {
+      await _experimentRepository.markExperimentPerformed(
+        schoolId: schoolId,
+        classLevel: classLevel,
+        experimentId: experimentId,
+      );
+
+      fetchClassExperiments(classLevel: classLevel);
+
+      return true;
+    } catch (e) {
+      log('erro in mark exp done - $e');
+    }
+    return false;
   }
 }

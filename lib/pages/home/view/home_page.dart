@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kailasha/app/app.dart';
 import 'package:kailasha/common/clickable_button.dart';
 import 'package:kailasha/common/common_app_bar.dart';
@@ -24,7 +25,7 @@ class HomePageParams {
   final String? schoolId;
   final String? schoolName;
   HomePageParams({this.schoolId, this.schoolName});
-} 
+}
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -128,7 +129,13 @@ class _HomePageState extends State<HomePage> {
                       final currentClass = state.classes[index];
                       return ClickableButton(
                         onTap: () {
-                          appRouter.push(ExperimentRoute(parms: ExperimentPageParams(classLevel: currentClass.name)));
+                          appRouter.push(
+                            ExperimentRoute(
+                              parms: ExperimentPageParams(
+                                classLevel: currentClass.name,
+                              ),
+                            ),
+                          );
                         },
                         child: GradientCommonContainer(
                           child: Row(
@@ -140,11 +147,26 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Expanded(
                                 child: Center(
-                                  child: GradientText(
-                                    text: currentClass.name,
-                                    style: CustomTextStyle.customW500(
-                                      fontSize: 20,
-                                    ),
+                                  child: Column(
+                                    children: [
+                                      GradientText(
+                                        text: currentClass.name,
+                                        style: CustomTextStyle.customW500(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      5.verticalSpace,
+                                      Text(
+                                        formatDate(
+                                          currentClass.createdAt ??
+                                              DateTime.now(),
+                                        ),
+                                        style: CustomTextStyle.customW500(
+                                          fontSize: 16,
+                                          color: AppColors.primary
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -176,5 +198,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  String formatDate(DateTime createdAt) {
+    return 'Created At - ${DateFormat('MMM dd yyyy').format(createdAt)}';
   }
 }

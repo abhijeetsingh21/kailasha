@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
 class ScienceExperiment {
   final String id;
@@ -6,6 +7,7 @@ class ScienceExperiment {
   final String subject;
   final String classLevel;
   final String aim;
+  final String? createdAt;
   final String theory;
   final List<String> materials;
   final List<Observation> observations;
@@ -17,6 +19,7 @@ class ScienceExperiment {
     required this.title,
     required this.subject,
     required this.classLevel,
+    this.createdAt,
     required this.aim,
     required this.theory,
     required this.materials,
@@ -25,7 +28,7 @@ class ScienceExperiment {
     required this.precautions,
   });
 
-  /// 🔥 Firestore constructor
+  ///  Firestore constructor
   factory ScienceExperiment.fromFirestore(
     QueryDocumentSnapshot<Map<String, dynamic>> doc,
   ) {
@@ -35,6 +38,7 @@ class ScienceExperiment {
       id: doc.id, // ✅ always correct
       title: data['title'] ?? '',
       subject: data['subject'] ?? '',
+      createdAt: data['subject'] ?? '',
       classLevel: data['classLevel'] ?? '',
       aim: data['aim'] ?? '',
       theory: data['theory'] ?? '',
@@ -53,6 +57,7 @@ class ScienceExperiment {
       id: json['id'],
       title: json['title'],
       subject: json['subject'],
+      createdAt: json['createdAt'],
       classLevel: json['classLevel'],
       aim: json['aim'],
       theory: json['theory'],
@@ -106,4 +111,42 @@ class Observation {
       // 'oxygenBubblesPerMinute': oxygenBubblesPerMinute,
     };
   }
+}
+
+class ClassExperimentProgress {
+  final bool isPerformed;
+  final DateTime? performedAt;
+  final String? remarks;
+
+  ClassExperimentProgress({
+    required this.isPerformed,
+    this.performedAt,
+    this.remarks,
+  });
+
+  factory ClassExperimentProgress.fromFirestore(
+    QueryDocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
+    final data = doc.data();
+    return ClassExperimentProgress(
+      isPerformed: data['isPerformed'] ?? false,
+      performedAt: (data['performedAt'] as Timestamp?)?.toDate(),
+      remarks: data['remarks'],
+    );
+  }
+}
+
+class MergedExperiment extends Equatable {
+  final ScienceExperiment experiment;
+  final bool isPerformed;
+  final DateTime? performedAt;
+
+  const MergedExperiment({
+    required this.experiment,
+    required this.isPerformed,
+    this.performedAt,
+  });
+
+  @override
+  List<Object?> get props => [experiment.id, isPerformed, performedAt];
 }

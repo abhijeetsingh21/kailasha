@@ -18,7 +18,8 @@ import 'package:kailasha/pages/experiments/view/experiment_details_page.dart';
 
 class ExperimentPageParams {
   final String classLevel;
-  ExperimentPageParams({required this.classLevel});
+  final String? schoolId;
+  ExperimentPageParams({required this.classLevel, this.schoolId});
 }
 
 @RoutePage()
@@ -35,7 +36,10 @@ class _ExperimentPageState extends State<ExperimentPage> {
   @override
   void initState() {
     experimentsCubit = context.read<ExperimentsCubit>();
-    experimentsCubit.fetchAllExperiments(classLevel: widget.parms.classLevel);
+    experimentsCubit.fetchClassExperiments(
+      classLevel: widget.parms.classLevel,
+      schoolId: widget.parms.schoolId,
+    );
     super.initState();
   }
 
@@ -94,6 +98,7 @@ class _ExperimentPageState extends State<ExperimentPage> {
                             ExperimentDetailsRoute(
                               params: ExperimentDetailsPageParams(
                                 experiment: experiment,
+                                schoolId: widget.parms.schoolId,
                               ),
                             ),
                           );
@@ -103,13 +108,15 @@ class _ExperimentPageState extends State<ExperimentPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Icon(
-                                Icons.label,
+                                experiment.isPerformed
+                                    ? Icons.check
+                                    : Icons.label,
                                 color: AppColors.textgradient[0],
                               ),
                               Expanded(
                                 child: Center(
                                   child: GradientText(
-                                    text: experiment.title,
+                                    text: experiment.experiment.title,
                                     style: CustomTextStyle.customW500(
                                       fontSize: 20,
                                     ),
