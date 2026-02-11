@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kailasha/app/app.dart';
 import 'package:kailasha/common/clickable_button.dart';
 import 'package:kailasha/common/common_app_bar.dart';
@@ -114,13 +115,28 @@ class _ExperimentPageState extends State<ExperimentPage> {
                                 color: AppColors.textgradient[0],
                               ),
                               Expanded(
-                                child: Center(
-                                  child: GradientText(
-                                    text: experiment.experiment.title,
-                                    style: CustomTextStyle.customW500(
-                                      fontSize: 20,
+                                child: Column(
+                                  children: [
+                                    GradientText(
+                                      text: experiment.experiment.title,
+                                      style: CustomTextStyle.customW500(
+                                        fontSize: 20,
+                                      ),
                                     ),
-                                  ),
+                                    if (experiment.performedAt != null) ...[
+                                      5.verticalSpace,
+                                      Text(
+                                        formatDate(
+                                          experiment.performedAt ??
+                                              DateTime.now(),
+                                        ),
+                                        style: CustomTextStyle.customW500(
+                                          fontSize: 14,
+                                          color: AppColors.primary
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
                               ),
                             ],
@@ -136,5 +152,9 @@ class _ExperimentPageState extends State<ExperimentPage> {
         ),
       ),
     );
+  }
+
+  String formatDate(DateTime createdAt) {
+    return 'Created At - ${DateFormat('MMM dd yyyy').format(createdAt)}';
   }
 }

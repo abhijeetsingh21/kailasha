@@ -27,7 +27,6 @@ class AuthCubit extends Cubit<AuthState> {
   void chackAuth() async {
     final user = await repository.fetchCurrentUser();
     if (user != null) {
-    
       emit(state.copyWith(userData: user));
     }
   }

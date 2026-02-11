@@ -21,6 +21,7 @@ class ExperimentsCubit extends Cubit<ExperimentsState> {
       state.copyWith(
         experimentApiStatus: ApiStatus.loading,
         currentClass: classLevel,
+        schoolId: schoolId,
       ),
     );
 
@@ -30,7 +31,7 @@ class ExperimentsCubit extends Cubit<ExperimentsState> {
 
       final progressMap = await _experimentRepository
           .fetchClassExperimentProgress(
-            schoolId: schoolId,
+            schoolId: state.schoolId,
             classLevel: classLevel,
           );
 

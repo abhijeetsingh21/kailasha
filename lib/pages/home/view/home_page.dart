@@ -133,6 +133,7 @@ class _HomePageState extends State<HomePage> {
                             ExperimentRoute(
                               parms: ExperimentPageParams(
                                 classLevel: currentClass.name,
+                                schoolId: widget.params.schoolId,
                               ),
                             ),
                           );
@@ -163,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         style: CustomTextStyle.customW500(
                                           fontSize: 16,
-                                          color: AppColors.primary
+                                          color: AppColors.primary,
                                         ),
                                       ),
                                     ],
