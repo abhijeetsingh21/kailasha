@@ -43,6 +43,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       if (creds.user != null) {
+         emit(state.copyWith(userData: creds.user));
         if (email == 'abhi@gmail.com') {
           appRouter.replaceAll([DashBoardRoute()]);
         } else {
@@ -55,6 +56,7 @@ class AuthCubit extends Cubit<AuthState> {
         //     password: password,
         //   ),
         // );
+       
       }
     } on FirebaseAuthException catch (e) {
       log('error in email sign in -- ${e.message}');

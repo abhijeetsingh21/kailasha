@@ -6,9 +6,13 @@ import 'package:kailasha/models/science_experiment/science_experiment_model.dart
 
 class ExperimentRepository {
   final FirebaseFirestore _firestore;
+  final FirebaseAuth _firebaseAuth;
 
-  ExperimentRepository({FirebaseFirestore? firestore})
-    : _firestore = firestore ?? FirebaseFirestore.instance;
+  ExperimentRepository({
+    FirebaseFirestore? firestore,
+    FirebaseAuth? firebaseAuth,
+  }) : _firestore = firestore ?? FirebaseFirestore.instance,
+       _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
   /// Add experiment (Admin only)
   Future<void> addExperiment(ScienceExperiment experiment) async {
@@ -79,8 +83,9 @@ class ExperimentRepository {
     String? schoolId,
     required String classLevel,
   }) async {
-    final currentSchoolId =
-        schoolId ?? FirebaseAuth.instance.currentUser?.uid ?? '';
+    final currentSchoolId = (schoolId != null && schoolId.isNotEmpty == true)
+        ? schoolId
+        : _firebaseAuth.currentUser?.uid;
     final snapshot = await _firestore
         .collection('schools')
         .doc(currentSchoolId)
