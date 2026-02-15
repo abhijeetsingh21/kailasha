@@ -40,6 +40,7 @@ class AuthRepository {
       /// 2️⃣ Create school document
       await _firestore.collection('schools').doc(user.uid).set({
         'name': schoolName,
+        'name_lower': schoolName.toLowerCase(),
         'board': board,
         'city': city,
         'state': state,

@@ -20,7 +20,7 @@ class DashBoardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonBackground(
-      // showSafeArea: false,
+      showSafeArea: false,
       child: AutoTabsScaffold(
         inheritNavigatorObservers: false,
         routes: const [SchoolsRoute(), AdminProfileRoute()],
@@ -44,35 +44,33 @@ class DashBoardPage extends StatelessWidget {
                     BoxShadow(color: Colors.black.withAlpha(20), blurRadius: 8),
                   ],
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _NavItem(
-                      index: 0,
-                      label: 'schools',
-                      isSelected: currentIndex == 0,
-                      onTap: () {
-                        if (tabsRouter.activeIndex != 0) {
-                          tabsRouter.setActiveIndex(0);
-                        }
-                      },
-                      asset: currentIndex == 0
-                          ? AppIcons.homeGradientIcon
-                          : AppIcons.homeIcon,
-                    ),
-                    _NavItem(
-                      index: 1,
-                      label: 'Profile',
-                      isSelected: currentIndex == 1,
-                      onTap: () {
-                        tabsRouter.setActiveIndex(1);
-                      },
-                      asset: currentIndex == 1
-                          ? AppIcons.earningsGradientIcon
-                          : AppIcons.earningIcon,
-                    ),
-],
+                child: SafeArea(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _NavItem(
+                        index: 0,
+                        label: 'schools',
+                        isSelected: currentIndex == 0,
+                        onTap: () {
+                          if (tabsRouter.activeIndex != 0) {
+                            tabsRouter.setActiveIndex(0);
+                          }
+                        },
+                        asset: Icons.home_outlined,
+                      ),
+                      _NavItem(
+                        index: 1,
+                        label: 'Profile',
+                        isSelected: currentIndex == 1,
+                        onTap: () {
+                          tabsRouter.setActiveIndex(1);
+                        },
+                        asset: Icons.person_2_outlined,
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -88,7 +86,7 @@ class _NavItem extends StatelessWidget {
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
-  final String asset;
+  final IconData asset;
 
   const _NavItem({
     required this.index,
@@ -115,11 +113,10 @@ class _NavItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ImageLoader.asset(
+            Icon(
               asset,
-              height: 28.heightMultiplier,
-              fit: BoxFit.contain,
-              // color: iconColor,
+              size: 35.heightMultiplier,
+              color: isSelected ? AppColors.textgradient[0] : AppColors.primary,
             ),
 
             6.verticalSpace,

@@ -39,13 +39,13 @@ class AdminProfilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //  Profile info
-            _InfoTile(label: 'Name', value: user?.displayName ?? 'Super Admin'),
+            _InfoTile(label: 'Name', value: 'Super Admin'),
             _InfoTile(label: 'Email', value: user?.email ?? '-'),
             const _InfoTile(label: 'Role', value: 'Super Admin'),
             const _InfoTile(label: 'App', value: 'Prayog'),
             ClickableButton(
               onTap: () {
-                 appRouter.push(AddExperimentRoute());
+                appRouter.push(AddExperimentRoute());
               },
               child: CommonContainer(
                 borderRadius: 4.radiusMultiplier,

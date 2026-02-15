@@ -8,6 +8,7 @@ import 'package:kailasha/common/common_background.dart';
 import 'package:kailasha/common/common_container.dart';
 import 'package:kailasha/common/common_functions.dart';
 import 'package:kailasha/common/custom_button.dart';
+import 'package:kailasha/common/custom_textfield.dart';
 import 'package:kailasha/common/gradient_text.dart';
 import 'package:kailasha/core/navigator/app_router.gr.dart';
 import 'package:kailasha/core/theme/app_colors.dart';
@@ -31,12 +32,19 @@ class SchoolsPage extends StatefulWidget {
 class _SchoolPageState extends State<SchoolsPage> {
   late SchoolsCubit schoolsCubit;
   late AuthCubit authCubit;
+  final TextEditingController _searchController = TextEditingController();
   @override
   void initState() {
     schoolsCubit = context.read<SchoolsCubit>();
     authCubit = context.read<AuthCubit>();
     schoolsCubit.fetchAllSchoolsAsAdmin();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -48,101 +56,117 @@ class _SchoolPageState extends State<SchoolsPage> {
           text: 'Schools',
           style: CustomTextStyle.customW600(fontSize: 22),
         ),
-        
+
         showBackButton: false,
       ),
-      child: CommonContainer(
-        child: BlocBuilder<SchoolsCubit, SchoolsState>(
-          builder: (context, state) {
-            if (state.schoolsApiStatus == ApiStatus.loading) {
-              return CommonFunctions.progressIndicator();
-            }
-            if (state.schools.isEmpty) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'No Schools Yet',
-                        style: CustomTextStyle.customW500(fontSize: 16),
-                      ),
-                    ),
-                  ),
-
-                
-                ],
-              );
-            }
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: state.schools.length,
-                    shrinkWrap: true,
-                    separatorBuilder: (context, index) {
-                      return 10.verticalSpace;
-                    },
-                    itemBuilder: (context, index) {
-                      final currentSchool = state.schools[index];
-                      return ClickableButton(
-                        onTap: () {
-                          appRouter.push(
-                            HomeRoute(
-                              params: HomePageParams(
-                                schoolId: currentSchool.id,
-                                schoolName: currentSchool.name
-                              ),
+      child: Column(
+        children: [
+          CommonContainer(
+            child: CustomTextField(
+              controller: _searchController,
+              hintText: 'Search Schools',
+              maxlines: 1,
+              useLabelText: false,
+              borderColor: AppColors.blue,
+              onChanged: (value) {
+                schoolsCubit.onSearchChanged(searchQuery: value);
+              },
+            ),
+          ),
+          Expanded(
+            child: CommonContainer(
+              child: BlocBuilder<SchoolsCubit, SchoolsState>(
+                builder: (context, state) {
+                  if (state.schoolsApiStatus == ApiStatus.loading) {
+                    return CommonFunctions.progressIndicator();
+                  }
+                  if (state.schools.isEmpty) {
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              'No Schools!',
+                              style: CustomTextStyle.customW500(fontSize: 16),
                             ),
-                          );
-                        },
-                        child: GradientCommonContainer(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(
-                                Icons.label,
-                                color: AppColors.textgradient[0],
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Column(
-                                    children: [
-                                      GradientText(
-                                        text: currentSchool.name,
-                                        style: CustomTextStyle.customW500(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      5.verticalSpace,
-                                      GradientText(
-                                        text: currentSchool.city,
-                                        style: CustomTextStyle.customW500(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      5.verticalSpace,
-                                      GradientText(
-                                        text: currentSchool.email,
-                                        style: CustomTextStyle.customW500(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-                
-              ],
-            );
-          },
-        ),
+                      ],
+                    );
+                  }
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: state.schools.length,
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) {
+                            return 10.verticalSpace;
+                          },
+                          itemBuilder: (context, index) {
+                            final currentSchool = state.schools[index];
+                            return ClickableButton(
+                              onTap: () {
+                                appRouter.push(
+                                  HomeRoute(
+                                    params: HomePageParams(
+                                      schoolId: currentSchool.id,
+                                      schoolName: currentSchool.name,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: GradientCommonContainer(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.label,
+                                      color: AppColors.textgradient[0],
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            GradientText(
+                                              text: currentSchool.name,
+                                              style: CustomTextStyle.customW500(
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                            5.verticalSpace,
+                                            GradientText(
+                                              text: currentSchool.city,
+                                              style: CustomTextStyle.customW500(
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                            5.verticalSpace,
+                                            GradientText(
+                                              text: currentSchool.email,
+                                              style: CustomTextStyle.customW500(
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

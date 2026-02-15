@@ -96,7 +96,6 @@ class ObservationControllers {
         CustomTextField(
           controller: observationController,
           hintText: 'Observation',
-          keyboardType: TextInputType.number,
         ),
         // 8.verticalSpace,
         // CustomTextField(

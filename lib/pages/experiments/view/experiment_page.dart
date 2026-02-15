@@ -155,6 +155,6 @@ class _ExperimentPageState extends State<ExperimentPage> {
   }
 
   String formatDate(DateTime createdAt) {
-    return 'Created At - ${DateFormat('MMM dd yyyy').format(createdAt)}';
+    return 'Performed At - ${DateFormat('MMM dd yyyy').format(createdAt)}';
   }
 }
