@@ -2,7 +2,7 @@ class AppImages {
   static const carImage = 'assets/images/car_image.png';
   static const rescueImage = 'assets/images/rescue_image.png';
   static const loginLogoImage = 'assets/images/login_logo.svg';
-  static const splashImage = 'assets/images/splash_logo.svg';
+  static const splashImage = 'assets/images/splash_logo.jpeg';
   static const offlineImage = 'assets/images/offline_image.png';
   static const mapImage = 'assets/images/map_image.png';
   static const completedMapImage = 'assets/images/completed_map.png';

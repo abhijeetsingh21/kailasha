@@ -44,8 +44,8 @@ class SignUpForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
-          child: ImageLoader.assetSvg(
-            AppImages.loginLogoImage,
+          child: ImageLoader.asset(
+            AppImages.splashImage,
             height: 60.heightMultiplier,
           ),
         ),

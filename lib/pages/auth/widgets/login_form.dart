@@ -42,8 +42,8 @@ class LoginForm extends StatelessWidget {
           30.verticalSpace,
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ImageLoader.assetSvg(
-              AppImages.loginLogoImage,
+            child: ImageLoader.asset(
+              AppImages.splashImage,
 
               height: 69.heightMultiplier,
             ),

@@ -40,7 +40,7 @@ class _AppState extends State<App> {
                   AppScreenUtil().init(constraints, orientation);
                   return RootBlocInjection(
                     child: MaterialApp.router(
-                      title: 'Zembora Driver',
+                      title: 'Prayog',
                       theme: AppTheme.lightTheme,
                       darkTheme: AppTheme.lightTheme,
                       routeInformationParser: appRouter.defaultRouteParser(),

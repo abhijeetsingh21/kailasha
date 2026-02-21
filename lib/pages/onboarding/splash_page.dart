@@ -94,7 +94,7 @@ class _SplashPageState extends State<SplashPage>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ImageLoader.assetSvg(
+                    ImageLoader.asset(
                       AppImages.splashImage,
                       height: 130.heightMultiplier,
                       width: 100.widthMultiplier,
